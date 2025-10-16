@@ -1,0 +1,13 @@
+### Create a new Patient entity
+POST http://localhost:4000/patients
+Content-Type: application/json
+
+{
+  "name" : "Charles Jenkins",
+  "email": "jenkins@gmail.com",
+  "gender": "MALE",
+  "address": "Cottbus, Germany",
+  "dateOfBirth": "1976-12-01"
+}
+
+###
