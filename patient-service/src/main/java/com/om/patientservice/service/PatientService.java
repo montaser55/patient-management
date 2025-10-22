@@ -4,24 +4,25 @@ import com.om.patientservice.dto.PatientRequestDTO;
 import com.om.patientservice.dto.PatientResponseDTO;
 import com.om.patientservice.exceptions.EmailAlreadyExistsException;
 import com.om.patientservice.exceptions.PatientNotFoundException;
+import com.om.patientservice.grpc.BillingServiceGrpcClient;
 import com.om.patientservice.mapper.PatientMapper;
-import com.om.patientservice.model.Gender;
 import com.om.patientservice.model.Patient;
 import com.om.patientservice.repository.PatientRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @Service
 public class PatientService {
 
     private final PatientRepository patientRepository;
+    private final BillingServiceGrpcClient billingServiceGrpcClient;
 
-    public PatientService(PatientRepository patientRepository) {
+    public PatientService(PatientRepository patientRepository, BillingServiceGrpcClient billingServiceGrpcClient) {
         this.patientRepository = patientRepository;
+        this.billingServiceGrpcClient = billingServiceGrpcClient;
     }
 
     public List<PatientResponseDTO> getPatients() {
@@ -35,6 +36,10 @@ public class PatientService {
                    + patientRequestDTO.getEmail()+" already exists.");
         }
         Patient newPatient = patientRepository.save(PatientMapper.toModel(patientRequestDTO));
+
+        billingServiceGrpcClient.createBillingAccount(newPatient.getId().toString(), newPatient.getName(),
+                newPatient.getEmail());
+
         return PatientMapper.toDTO(newPatient);
     }
 
