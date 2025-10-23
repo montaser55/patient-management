@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
   "name" : "Charles Jenkins",
-  "email": "jenkins3@gmail.com",
+  "email": "jenkins50@gmail.com",
   "gender": "MALE",
   "address": "Cottbus, Germany",
   "dateOfBirth": "1976-12-01"
